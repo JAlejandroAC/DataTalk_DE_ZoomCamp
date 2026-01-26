@@ -44,13 +44,13 @@ parse_dates = [
 @click.command()
 @click.option('--year', default=2021, help='Year for the data ingestion')
 @click.option('--month', default=1, help='Month for the data ingestion')
-@click.option('--pg-user', default='root', help='PostgreSQL user')
-@click.option('--pg-pass', default='root', help='PostgreSQL password')
-@click.option('--pg-host', default='localhost', help='PostgreSQL host')
-@click.option('--pg-port', default='5432', help='PostgreSQL port')
-@click.option('--pg-db', default='ny_taxi', help='PostgreSQL database name')
-@click.option('--target-table', default='yellow_taxi_data', help='Target table for data ingestion')
-@click.option('--chunk-size', default=100000, help='Chunk size for data ingestion')
+@click.option('--pg_user', default='root', help='PostgreSQL user')
+@click.option('--pg_password', default='root', help='PostgreSQL password')
+@click.option('--pg_host', default='localhost', help='PostgreSQL host')
+@click.option('--pg_port', default='5432', help='PostgreSQL port')
+@click.option('--pg_db', default='ny_taxi', help='PostgreSQL database name')
+@click.option('--target_table', default='yellow_taxi_data', help='Target table for data ingestion')
+@click.option('--chunk_size', default=100000, help='Chunk size for data ingestion')
 def run(year, month, pg_user, pg_password, pg_host, pg_port, pg_db, target_table, chunk_size):
     engine = create_engine(f'postgresql://{pg_user}:{pg_password}@{pg_host}:{pg_port}/{pg_db}')
 # In[2]:
@@ -79,7 +79,7 @@ def run(year, month, pg_user, pg_password, pg_host, pg_port, pg_db, target_table
     print("Table created")
 
     first_chunk.to_sql(
-        name="yellow_taxi_data",
+        name=target_table,
         con=engine,
         if_exists="append"
     )
@@ -88,7 +88,7 @@ def run(year, month, pg_user, pg_password, pg_host, pg_port, pg_db, target_table
 
     for df_chunk in tqdm(df_iter):
         df_chunk.to_sql(
-            name="yellow_taxi_data",
+            name=target_table,
             con=engine,
             if_exists="append"
         )
